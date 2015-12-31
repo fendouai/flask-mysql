@@ -1,8 +1,7 @@
 from flask import Flask,request
 import json
 from flask.ext.mysqldb import MySQL
-# from collections import orderddict
-#import flask.ext.login as flask_login
+
 app = Flask(__name__)
 mysql = MySQL(app)
 app.secret_key = 'superzoman'  
@@ -46,9 +45,6 @@ def tabledata():
 	cur= mysql.connection.cursor()
 	k = cur.execute('''SELECT * FROM '''+table_name)
 	data = cur.fetchall()
-	# if data == None :
-	# 	return None
-	
 	desc = cur.description
 	result = []
 	for i in xrange(k):
@@ -56,28 +52,7 @@ def tabledata():
 		for j in xrange(len(desc)):
 			dict[desc[j][0]] = data[i][j]
 		result.append(dict)
-
-	# print jsresult
 	return json.dumps(result,default=date_handler)
-
-
-# @app.route("/db",methods=['POST'])
-# def process():
-# 	table = request.json['table']
-# 	cur = mysql.connection.cursor()
-# 	cur.execute('''SELECT * FROM '''+table)
-# 	rv = cur.fetchall()
-# 	result = []
-# 	for row in rv:
-# 		d = dict()
-# 		d['id'] = row[0]
-# 		d['location'] = row[1]
-# 		d['rack'] = row[1]
-# 		d['server'] = row[1]
-# 		d['process'] = row[1]
-# 		result.append(d)
-# 	return json.dumps(result)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
